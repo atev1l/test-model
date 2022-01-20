@@ -47,7 +47,11 @@ function Mode({
         const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         scene.add(ambientLight);
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.autoRotate = true;
+        controls.enableRotate = false;
+        controls.enableZoom = true;
+        controls.panSpeed = 0;
+        controls.autoRotate = false;
+        controls.min
         controls.target = target;
         camera.position.set( 0, 0, 0 );
         controls.keys = {
@@ -56,6 +60,11 @@ function Mode({
             RIGHT: 'ArrowRight', // right arrow
             BOTTOM: 'ArrowDown' // down arrow
         }
+        let wheel;
+        document.addEventListener("mousedown", function(event){
+            wheel = false;
+            return false;
+        });
         controls.update();
 
         const light = new THREE.PointLight(0xc4c4c4,10);
@@ -93,6 +102,9 @@ function Mode({
             requestAnimationFrame( animate );
             target.x = ( 1 - mouse.x ) * 0.002;
             target.y = ( 1 - mouse.y ) * 0.002;
+            controls.enablePan = false;
+            controls.maxDistance = 6;
+            controls.minDistance = 6;
 
             camera.rotation.x += 0.05 * ( target.y - camera.rotation.x );
             camera.rotation.y += 0.05 * ( target.x - camera.rotation.y );
@@ -109,7 +121,6 @@ function Mode({
 
         function onMouseWheel( event ) {
 
-            camera.position.z += event.deltaY * 0.1; // move camera along z-axis
 
         }
 
