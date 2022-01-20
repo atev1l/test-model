@@ -4,6 +4,7 @@
 .fraq{
   display: flex;
   justify-content: space-between;
+  background-color: #0070f3;
 }
 .main {
   min-height: 100vh;

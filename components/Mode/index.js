@@ -7,10 +7,18 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 function Mode({
                   children
               }) {
+    const mouse = new THREE.Vector2();
+    const windowHalf = new THREE.Vector2( window.innerWidth / 2, window.innerHeight / 2 );
     const [target] = useState(new THREE.Vector3(-0.5, 0.1, 0));
     const [model, setModel] = useState()
+    const [initialCameraPosition] = useState(
+        new THREE.Vector3(20 * Math.sin(0.2 * Math.PI), 10, 20 * Math.cos(0.2 * Math.PI)),
+    );
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(window.innerHeight)
+    const easeOutCirc = (x) => {
+        return Math.sqrt(1 - Math.pow(x - 1, 2));
+    };
     useEffect(()=>{
         if (window.innerWidth > 700){
             setWidth(window.innerWidth);
@@ -41,6 +49,14 @@ function Mode({
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.autoRotate = true;
         controls.target = target;
+        camera.position.set( 0, 0, 0 );
+        controls.keys = {
+            LEFT: 'ArrowLeft', //left arrow
+            UP: 'ArrowUp', // up arrow
+            RIGHT: 'ArrowRight', // right arrow
+            BOTTOM: 'ArrowDown' // down arrow
+        }
+        controls.update();
 
         const light = new THREE.PointLight(0xc4c4c4,10);
         light.position.set(900,50,500);
@@ -53,6 +69,9 @@ function Mode({
         const container = document.getElementById( 'foxy' );
         document.body.appendChild( container );
         container.appendChild( renderer.domElement );
+        document.addEventListener( 'mousemove', onMouseMove, false );
+        document.addEventListener( 'wheel', onMouseWheel, false );
+        window.addEventListener( 'resize', onResize, false );
 
         // const geometry = new THREE.BoxGeometry( 1, 1, 1 );
         // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -68,16 +87,51 @@ function Mode({
         } );
 
         camera.position.z = 5;
+        let frame = 0;
 
         const animate = function () {
             requestAnimationFrame( animate );
+            target.x = ( 1 - mouse.x ) * 0.002;
+            target.y = ( 1 - mouse.y ) * 0.002;
 
-
+            camera.rotation.x += 0.05 * ( target.y - camera.rotation.x );
+            camera.rotation.y += 0.05 * ( target.x - camera.rotation.y );
+            controls.update();
             renderer.render( scene, camera );
         };
 
+        function onMouseMove( event ) {
+
+            mouse.x = ( event.clientX - windowHalf.x );
+            mouse.y = ( event.clientY - windowHalf.x );
+
+        }
+
+        function onMouseWheel( event ) {
+
+            camera.position.z += event.deltaY * 0.1; // move camera along z-axis
+
+        }
+
+        function onResize( event ) {
+
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            windowHalf.set( width / 2, height / 2 );
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize( width, height );
+
+        }
+
+
+
         animate();
     }
+
+
 
     useEffect(() => {
         init()
