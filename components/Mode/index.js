@@ -47,11 +47,11 @@ function Mode({
         const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         scene.add(ambientLight);
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableRotate = false;
-        controls.enableZoom = true;
-        controls.panSpeed = 0;
-        controls.autoRotate = false;
-        controls.min
+        // controls.enableRotate = false;
+        // controls.enableZoom = true;
+        // controls.panSpeed = 0;
+        // controls.autoRotate = false;
+        // controls.min
         controls.target = target;
         camera.position.set( 0, 0, 0 );
         controls.keys = {
@@ -68,11 +68,14 @@ function Mode({
         controls.update();
 
         const light = new THREE.PointLight(0xc4c4c4,10);
-        light.position.set(900,50,500);
+        light.position.set(800, 1400 ,0);
         scene.add(light);
-        const light3 = new THREE.PointLight(0xc4c4c4,10);
-        light3.position.set(1500,100,-500);
-        scene.add(light3);
+        // const light = new THREE.PointLight(0xc4c4c4,10);
+        // light.position.set(900,50,500);
+        // scene.add(light);
+        // const light3 = new THREE.PointLight(0xc4c4c4,10);
+        // light3.position.set(1500,100,-500);
+        // scene.add(light3);
 
         renderer.setSize( width/1.5, height/1.5 );
         const container = document.getElementById( 'foxy' );
@@ -86,7 +89,7 @@ function Mode({
         // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
         // const cube = new THREE.Mesh( geometry, material );
         // scene.add( cube );
-        loader.load( 'fox/scene.gltf', function ( gltf ) {
+        loader.load( 'cat/cat.glb', function ( gltf ) {
             scene.add( gltf.scene );
             setModel(gltf)
         }, undefined, function ( error ) {
