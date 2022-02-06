@@ -1,7 +1,6 @@
 
 import * as THREE from "three";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import styles from '/styles/Mode.module.css'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {useEffect, useState} from "react";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 function Mode({
